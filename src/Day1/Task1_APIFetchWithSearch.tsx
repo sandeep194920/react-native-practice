@@ -52,11 +52,17 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
+interface User {
+  id: number;
+  name: string;
+  email: string;
+}
+
 function UserList() {
-  const [data, setData] = useState([]);
-  const [filteredData, setFilteredData] = useState([]);
+  const [data, setData] = useState<User[]>([]);
+  const [filteredData, setFilteredData] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
 
   // Fetch data on component mount
@@ -93,7 +99,7 @@ function UserList() {
       setFilteredData(json);
     } catch (err) {
       console.error('Fetch error:', err);
-      setError(err.message);
+      setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
       setLoading(false);
     }
