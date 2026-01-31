@@ -2,6 +2,14 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity, SafeAreaView } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 
+interface Task {
+  id: string;
+  title: string;
+  component: () => React.JSX.Element;
+  day: string;
+  time: string;
+}
+
 // Day 1 Tasks
 import Task1_APIFetchWithSearch from './src/Day1/Task1_APIFetchWithSearch';
 import Task2_FlatListOptimization from './src/Day1/Task2_FlatListOptimization';
@@ -15,9 +23,9 @@ import Task7_InfiniteScroll from './src/Day2/Task7_InfiniteScroll';
 import Task8_FormValidation from './src/Day2/Task8_FormValidation';
 
 export default function App() {
-  const [currentTask, setCurrentTask] = useState(null);
+  const [currentTask, setCurrentTask] = useState<Task | null>(null);
 
-  const tasks = [
+  const tasks: Task[] = [
     { id: 'day1-task1', title: 'Task 1: API Fetch with Search', component: Task1_APIFetchWithSearch, day: 'Day 1', time: '20-25 min' },
     { id: 'day1-task2', title: 'Task 2: FlatList Optimization', component: Task2_FlatListOptimization, day: 'Day 1', time: '20-25 min' },
     { id: 'day1-task3', title: 'Task 3: Debounced Search', component: Task3_DebouncedSearch, day: 'Day 1', time: '20-25 min' },

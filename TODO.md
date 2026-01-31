@@ -1,0 +1,3 @@
+- [ ] - Use useQuery hook
+- [ ] - Look up how to cancel the API call in between (see how to do it in one of our practice tasks)
+- [ ] - Practice Job board API here
