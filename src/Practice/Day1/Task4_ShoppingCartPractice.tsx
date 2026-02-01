@@ -43,46 +43,70 @@
  * Implement the cart functions below!
  */
 
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   View,
   FlatList,
   Text,
   TouchableOpacity,
   StyleSheet,
-} from 'react-native';
+} from "react-native";
 
 const PRODUCTS = [
-  { id: '1', name: 'Laptop', price: 999 },
-  { id: '2', name: 'Mouse', price: 29 },
-  { id: '3', name: 'Keyboard', price: 79 },
-  { id: '4', name: 'Monitor', price: 299 },
-  { id: '5', name: 'Headphones', price: 149 },
+  { id: "1", name: "Laptop", price: 999 },
+  { id: "2", name: "Mouse", price: 29 },
+  { id: "3", name: "Keyboard", price: 79 },
+  { id: "4", name: "Monitor", price: 299 },
+  { id: "5", name: "Headphones", price: 149 },
 ];
 
+const initialCart = PRODUCTS.map((product) => ({
+  ...product,
+  qty: 0,
+}));
+
+type Product = (typeof PRODUCTS)[number];
+
+interface CartItem extends Product {
+  qty: number;
+}
+
 function ShoppingCartPractice() {
-  const [cart, setCart] = useState([]);
+  const [cart, setCart] = useState(initialCart);
 
   // TODO: Implement addToCart
   // HINT: Use setCart with prevCart pattern
   // Add the product to the cart array
-  const addToCart = (product) => {
-    // Your code here
+  const addToCart = (product: CartItem) => {
+    setCart((prevCart) =>
+      prevCart.map((item) =>
+        item.id === product.id ? { ...item, qty: item.qty + 1 } : item,
+      ),
+    );
   };
 
   // TODO: Implement removeFromCart
   // HINT: Use findIndex to find the first occurrence
   // Use splice to remove it from the array
   // Don't forget to use the prevCart pattern!
-  const removeFromCart = (productId) => {
-    // Your code here
+  const removeFromCart = (productId: string) => {
+    setCart((prevCart) =>
+      prevCart.map((item) =>
+        item.id === productId
+          ? { ...item, qty: Math.max(item.qty - 1, 0) }
+          : item,
+      ),
+    );
   };
 
   // TODO: Implement getCartCount
   // HINT: Return the length of the cart array
   const getCartCount = () => {
     // Your code here
-    return 0;
+    return cart.reduce((totalItems, item) => {
+      if (item.qty > 0) return (totalItems += 1);
+      return totalItems;
+    }, 0);
   };
 
   // TODO: Implement getCartTotal
@@ -90,18 +114,20 @@ function ShoppingCartPractice() {
   // Don't forget toFixed(2) for proper currency formatting
   const getCartTotal = () => {
     // Your code here
-    return '0.00';
+    return cart.reduce((total, item) => {
+      return total + item.qty * item.price;
+    }, 0);
   };
 
   // TODO: Implement getProductQuantity
   // HINT: Use filter to count how many times this product appears in cart
-  const getProductQuantity = (productId) => {
-    // Your code here
-    return 0;
-  };
+  // const getProductQuantity = (productId: string) => {
+  //   // Your code here
+  //   return 0;
+  // };
 
-  const renderProduct = ({ item }) => {
-    const quantity = getProductQuantity(item.id);
+  const renderProduct = ({ item }: { item: CartItem }) => {
+    const quantity = item.qty;
 
     return (
       <View style={styles.productCard}>
@@ -144,7 +170,7 @@ function ShoppingCartPractice() {
 
       {/* Product List */}
       <FlatList
-        data={PRODUCTS}
+        data={cart}
         keyExtractor={(item) => item.id}
         renderItem={renderProduct}
         contentContainerStyle={styles.listContent}
@@ -154,7 +180,7 @@ function ShoppingCartPractice() {
       {cart.length > 0 && (
         <View style={styles.footer}>
           <Text style={styles.totalLabel}>Total:</Text>
-          <Text style={styles.totalAmount}>${getCartTotal()}</Text>
+          <Text style={styles.totalAmount}>${getCartTotal().toFixed(2)}</Text>
         </View>
       )}
     </View>
@@ -162,61 +188,66 @@ function ShoppingCartPractice() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f5f5f5' },
+  container: { flex: 1, backgroundColor: "#f5f5f5" },
   header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     padding: 16,
-    backgroundColor: '#0066cc',
+    backgroundColor: "#0066cc",
   },
-  headerTitle: { fontSize: 24, fontWeight: 'bold', color: 'white' },
+  headerTitle: { fontSize: 24, fontWeight: "bold", color: "white" },
   cartBadge: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 20,
   },
-  cartCount: { fontSize: 16, fontWeight: 'bold' },
+  cartCount: { fontSize: 16, fontWeight: "bold" },
   listContent: { padding: 16 },
   productCard: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    backgroundColor: 'white',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    backgroundColor: "white",
     padding: 16,
     marginBottom: 12,
     borderRadius: 12,
   },
   productInfo: { flex: 1 },
-  productName: { fontSize: 18, fontWeight: '600', marginBottom: 4 },
-  productPrice: { fontSize: 16, color: '#0066cc' },
+  productName: { fontSize: 18, fontWeight: "600", marginBottom: 4 },
+  productPrice: { fontSize: 16, color: "#0066cc" },
   controls: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: 12,
   },
   button: {
     width: 36,
     height: 36,
-    backgroundColor: '#0066cc',
+    backgroundColor: "#0066cc",
     borderRadius: 18,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
-  buttonText: { color: 'white', fontSize: 20, fontWeight: 'bold' },
-  quantity: { fontSize: 18, fontWeight: 'bold', minWidth: 30, textAlign: 'center' },
+  buttonText: { color: "white", fontSize: 20, fontWeight: "bold" },
+  quantity: {
+    fontSize: 18,
+    fontWeight: "bold",
+    minWidth: 30,
+    textAlign: "center",
+  },
   footer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     padding: 20,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderTopWidth: 1,
-    borderTopColor: '#ddd',
+    borderTopColor: "#ddd",
   },
-  totalLabel: { fontSize: 20, fontWeight: '600' },
-  totalAmount: { fontSize: 24, fontWeight: 'bold', color: '#0066cc' },
+  totalLabel: { fontSize: 20, fontWeight: "600" },
+  totalAmount: { fontSize: 24, fontWeight: "bold", color: "#0066cc" },
 });
 
 export default ShoppingCartPractice;
