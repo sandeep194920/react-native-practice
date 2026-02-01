@@ -31,6 +31,11 @@ import Task8_FormValidation from "./src/Day2/Task8_FormValidation";
 import Task1_APIFetchWithSearchPractice from "./src/Practice/Day1/Task1_APIFetchWithSearchPractice";
 import Task2_FlatListOptimizationPractice from "./src/Practice/Day1/Task2_FlatListOptimizationPractice";
 import Task3_DebouncedSearchPractice from "./src/Practice/Day1/Task3_DebouncedSearchPractice";
+import Task4_ShoppingCartPractice from "./src/Practice/Day1/Task4_ShoppingCartPractice";
+import Task5_DataTransformationPractice from "./src/Practice/Day1/Task5_DataTransformationPractice";
+import Task6_PullToRefreshPractice from "./src/Practice/Day2/Task6_PullToRefreshPractice";
+import Task7_InfiniteScrollPractice from "./src/Practice/Day2/Task7_InfiniteScrollPractice";
+import Task8_FormValidationPractice from "./src/Practice/Day2/Task8_FormValidationPractice";
 
 export default function App() {
   const [currentTask, setCurrentTask] = useState<Task | null>(null);
@@ -89,9 +94,23 @@ export default function App() {
       time: "20-25 min",
     },
     {
+      id: "day1-task4-practice",
+      title: "Task 4: Shopping Cart - Practice",
+      component: Task4_ShoppingCartPractice,
+      day: "Day 1",
+      time: "20-25 min",
+    },
+    {
       id: "day1-task5",
       title: "Task 5: Data Transformation",
       component: Task5_DataTransformation,
+      day: "Day 1",
+      time: "20-25 min",
+    },
+    {
+      id: "day1-task5-practice",
+      title: "Task 5: Data Transformation - Practice",
+      component: Task5_DataTransformationPractice,
       day: "Day 1",
       time: "20-25 min",
     },
@@ -103,6 +122,13 @@ export default function App() {
       time: "20-30 min",
     },
     {
+      id: "day2-task6-practice",
+      title: "Task 6: Pull to Refresh - Practice",
+      component: Task6_PullToRefreshPractice,
+      day: "Day 2",
+      time: "20-30 min",
+    },
+    {
       id: "day2-task7",
       title: "Task 7: Infinite Scroll",
       component: Task7_InfiniteScroll,
@@ -110,9 +136,23 @@ export default function App() {
       time: "30-45 min",
     },
     {
+      id: "day2-task7-practice",
+      title: "Task 7: Infinite Scroll - Practice",
+      component: Task7_InfiniteScrollPractice,
+      day: "Day 2",
+      time: "30-45 min",
+    },
+    {
       id: "day2-task8",
       title: "Task 8: Form Validation",
       component: Task8_FormValidation,
+      day: "Day 2",
+      time: "30-45 min",
+    },
+    {
+      id: "day2-task8-practice",
+      title: "Task 8: Form Validation - Practice",
+      component: Task8_FormValidationPractice,
       day: "Day 2",
       time: "30-45 min",
     },
