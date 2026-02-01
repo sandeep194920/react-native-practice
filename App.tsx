@@ -29,6 +29,7 @@ import Task6_PullToRefresh from "./src/Day2/Task6_PullToRefresh";
 import Task7_InfiniteScroll from "./src/Day2/Task7_InfiniteScroll";
 import Task8_FormValidation from "./src/Day2/Task8_FormValidation";
 import Task1_APIFetchWithSearchPractice from "./src/Practice/Day1/Task1_APIFetchWithSearchPractice";
+import Task2_FlatListOptimizationPractice from "./src/Practice/Day1/Task2_FlatListOptimizationPractice";
 
 export default function App() {
   const [currentTask, setCurrentTask] = useState<Task | null>(null);
@@ -46,7 +47,7 @@ export default function App() {
     },
     {
       id: "day1-task1-practice",
-      title: "Task 1: Practice",
+      title: "Task 1:  API Fetch with Search - Practice",
       component: Task1_APIFetchWithSearchPractice,
       day: "Day 1",
       time: "20-25 min",
@@ -55,6 +56,13 @@ export default function App() {
       id: "day1-task2",
       title: "Task 2: FlatList Optimization",
       component: Task2_FlatListOptimization,
+      day: "Day 1",
+      time: "20-25 min",
+    },
+    {
+      id: "day1-task2-practice",
+      title: "Task 2: FlatList Optimization -  Practice",
+      component: Task2_FlatListOptimizationPractice,
       day: "Day 1",
       time: "20-25 min",
     },
