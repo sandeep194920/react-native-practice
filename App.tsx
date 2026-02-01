@@ -30,6 +30,7 @@ import Task7_InfiniteScroll from "./src/Day2/Task7_InfiniteScroll";
 import Task8_FormValidation from "./src/Day2/Task8_FormValidation";
 import Task1_APIFetchWithSearchPractice from "./src/Practice/Day1/Task1_APIFetchWithSearchPractice";
 import Task2_FlatListOptimizationPractice from "./src/Practice/Day1/Task2_FlatListOptimizationPractice";
+import Task3_DebouncedSearchPractice from "./src/Practice/Day1/Task3_DebouncedSearchPractice";
 
 export default function App() {
   const [currentTask, setCurrentTask] = useState<Task | null>(null);
@@ -70,6 +71,13 @@ export default function App() {
       id: "day1-task3",
       title: "Task 3: Debounced Search",
       component: Task3_DebouncedSearch,
+      day: "Day 1",
+      time: "20-25 min",
+    },
+    {
+      id: "day1-task3-practice",
+      title: "Task 3: Debounced Search - Practice",
+      component: Task3_DebouncedSearchPractice,
       day: "Day 1",
       time: "20-25 min",
     },
