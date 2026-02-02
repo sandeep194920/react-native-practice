@@ -35,7 +35,7 @@
  * Implement the validation logic and form handling!
  */
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo } from "react";
 import {
   View,
   TextInput,
@@ -43,11 +43,11 @@ import {
   TouchableOpacity,
   StyleSheet,
   Alert,
-} from 'react-native';
+} from "react-native";
 
 function LoginFormPractice() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [emailTouched, setEmailTouched] = useState(false);
   const [passwordTouched, setPasswordTouched] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -60,8 +60,15 @@ function LoginFormPractice() {
   // 4. If regex fails, return 'Invalid email format'
   // 5. Otherwise, return empty string
   const emailError = useMemo(() => {
-    // Your code here
-    return '';
+    if (!emailTouched) return;
+
+    if (email.trim() === "") return "Email is required";
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(email)) return "Invalid email format";
+
+    return "";
   }, [email, emailTouched]);
 
   // TODO: Implement password validation with useMemo
@@ -71,8 +78,13 @@ function LoginFormPractice() {
   // 3. If length < 6, return 'Password must be at least 6 characters'
   // 4. Otherwise, return empty string
   const passwordError = useMemo(() => {
-    // Your code here
-    return '';
+    if (!passwordTouched) return "";
+
+    if (password.length === 0) return "Password is required";
+
+    if (password.length < 6) return "Password must be at least 6 characters";
+
+    return "";
   }, [password, passwordTouched]);
 
   // TODO: Calculate isValid
@@ -81,7 +93,7 @@ function LoginFormPractice() {
   // - emailError is empty string
   // - password length >= 6
   // - passwordError is empty string
-  const isValid = false; // Replace with your logic
+  const isValid = !emailError && !passwordError; // Replace with your logic
 
   // TODO: Implement handleSubmit
   // HINTS:
@@ -102,7 +114,10 @@ function LoginFormPractice() {
       {/* Email Input */}
       <View style={styles.inputContainer}>
         <TextInput
-          style={[styles.input, emailError && emailTouched && styles.inputError]}
+          style={[
+            styles.input,
+            emailTouched && emailError && styles.inputError,
+          ]}
           placeholder="Email"
           value={email}
           onChangeText={setEmail}
@@ -119,7 +134,10 @@ function LoginFormPractice() {
       {/* Password Input */}
       <View style={styles.inputContainer}>
         <TextInput
-          style={[styles.input, passwordError && passwordTouched && styles.inputError]}
+          style={[
+            styles.input,
+            passwordError && passwordTouched && styles.inputError,
+          ]}
           placeholder="Password"
           value={password}
           onChangeText={setPassword}
@@ -133,12 +151,15 @@ function LoginFormPractice() {
 
       {/* Submit Button */}
       <TouchableOpacity
-        style={[styles.button, (!isValid || submitting) && styles.buttonDisabled]}
+        style={[
+          styles.button,
+          (!isValid || submitting) && styles.buttonDisabled,
+        ]}
         onPress={handleSubmit}
         disabled={!isValid || submitting}
       >
         <Text style={styles.buttonText}>
-          {submitting ? 'Logging in...' : 'Login'}
+          {submitting ? "Logging in..." : "Login"}
         </Text>
       </TouchableOpacity>
     </View>
@@ -149,48 +170,48 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    justifyContent: 'center',
-    backgroundColor: '#f5f5f5',
+    justifyContent: "center",
+    backgroundColor: "#f5f5f5",
   },
   title: {
     fontSize: 32,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 32,
-    textAlign: 'center',
+    textAlign: "center",
   },
   inputContainer: {
     marginBottom: 20,
   },
   input: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     padding: 16,
     borderRadius: 8,
     fontSize: 16,
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: "#ddd",
   },
   inputError: {
-    borderColor: '#d32f2f',
+    borderColor: "#d32f2f",
   },
   errorText: {
-    color: '#d32f2f',
+    color: "#d32f2f",
     fontSize: 14,
     marginTop: 4,
     marginLeft: 4,
   },
   button: {
-    backgroundColor: '#0066cc',
+    backgroundColor: "#0066cc",
     padding: 16,
     borderRadius: 8,
-    alignItems: 'center',
+    alignItems: "center",
   },
   buttonDisabled: {
-    backgroundColor: '#ccc',
+    backgroundColor: "#ccc",
   },
   buttonText: {
-    color: 'white',
+    color: "white",
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
 });
 
