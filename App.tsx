@@ -6,7 +6,7 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 
 interface Task {
@@ -158,150 +158,149 @@ export default function App() {
     },
   ];
 
-  if (currentTask) {
-    const TaskComponent = currentTask.component;
-    return (
-      <SafeAreaView style={styles.taskContainer}>
-        <View style={styles.taskHeader}>
-          <TouchableOpacity
-            onPress={() => setCurrentTask(null)}
-            style={styles.backButton}
-          >
-            <Text style={styles.backButtonText}>← Back to Menu</Text>
-          </TouchableOpacity>
-          <Text style={styles.taskTitle}>{currentTask.title}</Text>
-          <Text style={styles.taskTime}>Target: {currentTask.time}</Text>
-        </View>
-        <View style={styles.taskContent}>
-          <TaskComponent />
-        </View>
-        <StatusBar style="auto" />
-      </SafeAreaView>
-    );
-  }
-
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>🚀 React Native Interview Prep</Text>
-        <Text style={styles.headerSubtitle}>
-          TopTal Technical Interview Practice
-        </Text>
-        <Text style={styles.interviewDate}>
-          Interview: Mon, Feb 02, 2026 @ 11:30 AM EST
-        </Text>
-      </View>
-
-      <ScrollView
-        style={styles.scrollView}
-        contentContainerStyle={styles.scrollContent}
-      >
-        {/* Day 1 Section */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>
-            📅 Day 1 - Core Patterns (5 hours)
-          </Text>
-          <Text style={styles.sectionDescription}>
-            Master the most common RN interview tasks
-          </Text>
-          {tasks
-            .filter((task) => task.day === "Day 1")
-            .map((task) => (
-              <TouchableOpacity
-                key={task.id}
-                style={styles.taskButton}
-                onPress={() => setCurrentTask(task)}
-              >
-                <View style={styles.taskButtonContent}>
-                  <Text style={styles.taskButtonTitle}>{task.title}</Text>
-                  <Text style={styles.taskButtonTime}>{task.time}</Text>
-                </View>
-              </TouchableOpacity>
-            ))}
-        </View>
-
-        {/* Day 2 Section */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>
-            📅 Day 2 - Advanced Patterns (4 hours)
-          </Text>
-          <Text style={styles.sectionDescription}>
-            Handle complex scenarios
-          </Text>
-          {tasks
-            .filter((task) => task.day === "Day 2")
-            .map((task) => (
-              <TouchableOpacity
-                key={task.id}
-                style={styles.taskButton}
-                onPress={() => setCurrentTask(task)}
-              >
-                <View style={styles.taskButtonContent}>
-                  <Text style={styles.taskButtonTitle}>{task.title}</Text>
-                  <Text style={styles.taskButtonTime}>{task.time}</Text>
-                </View>
-              </TouchableOpacity>
-            ))}
-        </View>
-
-        {/* Day 3 Section */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>
-            📅 Day 3 - Mock Interviews (3 hours)
-          </Text>
-          <Text style={styles.sectionDescription}>
-            Full interview simulations
-          </Text>
-          <View style={styles.infoBox}>
-            <Text style={styles.infoTitle}>📋 Mock Interview #1</Text>
-            <Text style={styles.infoText}>• 90 minutes timed practice</Text>
-            <Text style={styles.infoText}>• Tasks 1, 4, 3 from Day 1</Text>
-            <Text style={styles.infoText}>• Practice talking out loud!</Text>
+    <SafeAreaProvider>
+      {currentTask ? (
+        <SafeAreaView style={styles.taskContainer}>
+          <View style={styles.taskHeader}>
+            <TouchableOpacity
+              onPress={() => setCurrentTask(null)}
+              style={styles.backButton}
+            >
+              <Text style={styles.backButtonText}>← Back to Menu</Text>
+            </TouchableOpacity>
+            <Text style={styles.taskTitle}>{currentTask.title}</Text>
+            <Text style={styles.taskTime}>Target: {currentTask.time}</Text>
           </View>
-          <View style={styles.infoBox}>
-            <Text style={styles.infoTitle}>📋 Mock Interview #2</Text>
-            <Text style={styles.infoText}>• 90 minutes timed practice</Text>
-            <Text style={styles.infoText}>• Tasks 5, 7, 8</Text>
-            <Text style={styles.infoText}>• Focus on speed + clarity</Text>
+          <View style={styles.taskContent}>
+            {currentTask.component && <currentTask.component />}
           </View>
-        </View>
-
-        {/* Progress Tracker */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>📊 Track Your Progress</Text>
-          <Text style={styles.sectionDescription}>
-            Open [PROGRESS.md](./PROGRESS.md) to check off completed tasks!
-          </Text>
-        </View>
-
-        {/* Tips Section */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>💡 Quick Tips</Text>
-          <View style={styles.tipBox}>
-            <Text style={styles.tipText}>
-              ✅ Always use keyExtractor on FlatList
+          <StatusBar style="auto" />
+        </SafeAreaView>
+      ) : (
+        <SafeAreaView style={styles.container}>
+          <View style={styles.header}>
+            <Text style={styles.headerTitle}>🚀 React Native Interview Prep</Text>
+            <Text style={styles.headerSubtitle}>
+              TopTal Technical Interview Practice
             </Text>
-            <Text style={styles.tipText}>
-              ✅ Handle loading, error, empty states
-            </Text>
-            <Text style={styles.tipText}>
-              ✅ Use Set for O(n) deduplication
-            </Text>
-            <Text style={styles.tipText}>
-              ✅ useEffect cleanup prevents memory leaks
-            </Text>
-            <Text style={styles.tipText}>
-              ✅ Talk out loud during practice!
+            <Text style={styles.interviewDate}>
+              Interview: Mon, Feb 02, 2026 @ 11:30 AM EST
             </Text>
           </View>
-        </View>
 
-        <View style={styles.footer}>
-          <Text style={styles.footerText}>Good luck! You've got this! 💪</Text>
-        </View>
-      </ScrollView>
-      <StatusBar style="auto" />
-    </SafeAreaView>
+          <ScrollView
+            style={styles.scrollView}
+            contentContainerStyle={styles.scrollContent}
+          >
+            {/* Day 1 Section */}
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>
+                📅 Day 1 - Core Patterns (5 hours)
+              </Text>
+              <Text style={styles.sectionDescription}>
+                Master the most common RN interview tasks
+              </Text>
+              {tasks
+                .filter((task) => task.day === "Day 1")
+                .map((task) => (
+                  <TouchableOpacity
+                    key={task.id}
+                    style={styles.taskButton}
+                    onPress={() => setCurrentTask(task)}
+                  >
+                    <View style={styles.taskButtonContent}>
+                      <Text style={styles.taskButtonTitle}>{task.title}</Text>
+                      <Text style={styles.taskButtonTime}>{task.time}</Text>
+                    </View>
+                  </TouchableOpacity>
+                ))}
+            </View>
+
+            {/* Day 2 Section */}
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>
+                📅 Day 2 - Advanced Patterns (4 hours)
+              </Text>
+              <Text style={styles.sectionDescription}>
+                Handle complex scenarios
+              </Text>
+              {tasks
+                .filter((task) => task.day === "Day 2")
+                .map((task) => (
+                  <TouchableOpacity
+                    key={task.id}
+                    style={styles.taskButton}
+                    onPress={() => setCurrentTask(task)}
+                  >
+                    <View style={styles.taskButtonContent}>
+                      <Text style={styles.taskButtonTitle}>{task.title}</Text>
+                      <Text style={styles.taskButtonTime}>{task.time}</Text>
+                    </View>
+                  </TouchableOpacity>
+                ))}
+            </View>
+
+            {/* Day 3 Section */}
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>
+                📅 Day 3 - Mock Interviews (3 hours)
+              </Text>
+              <Text style={styles.sectionDescription}>
+                Full interview simulations
+              </Text>
+              <View style={styles.infoBox}>
+                <Text style={styles.infoTitle}>📋 Mock Interview #1</Text>
+                <Text style={styles.infoText}>• 90 minutes timed practice</Text>
+                <Text style={styles.infoText}>• Tasks 1, 4, 3 from Day 1</Text>
+                <Text style={styles.infoText}>• Practice talking out loud!</Text>
+              </View>
+              <View style={styles.infoBox}>
+                <Text style={styles.infoTitle}>📋 Mock Interview #2</Text>
+                <Text style={styles.infoText}>• 90 minutes timed practice</Text>
+                <Text style={styles.infoText}>• Tasks 5, 7, 8</Text>
+                <Text style={styles.infoText}>• Focus on speed + clarity</Text>
+              </View>
+            </View>
+
+            {/* Progress Tracker */}
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>📊 Track Your Progress</Text>
+              <Text style={styles.sectionDescription}>
+                Open [PROGRESS.md](./PROGRESS.md) to check off completed tasks!
+              </Text>
+            </View>
+
+            {/* Tips Section */}
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>💡 Quick Tips</Text>
+              <View style={styles.tipBox}>
+                <Text style={styles.tipText}>
+                  ✅ Always use keyExtractor on FlatList
+                </Text>
+                <Text style={styles.tipText}>
+                  ✅ Handle loading, error, empty states
+                </Text>
+                <Text style={styles.tipText}>
+                  ✅ Use Set for O(n) deduplication
+                </Text>
+                <Text style={styles.tipText}>
+                  ✅ useEffect cleanup prevents memory leaks
+                </Text>
+                <Text style={styles.tipText}>
+                  ✅ Talk out loud during practice!
+                </Text>
+              </View>
+            </View>
+
+            <View style={styles.footer}>
+              <Text style={styles.footerText}>Good luck! You've got this! 💪</Text>
+            </View>
+          </ScrollView>
+          <StatusBar style="auto" />
+        </SafeAreaView>
+      )}
+    </SafeAreaProvider>
   );
 }
 

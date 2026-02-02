@@ -45,28 +45,74 @@
  * Implement the cleanAndTransform function below!
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   View,
   SectionList,
   Text,
   ActivityIndicator,
   StyleSheet,
-} from 'react-native';
+} from "react-native";
 
 // Simulated messy API data
 const MESSY_DATA = [
-  { id: 1, name: 'Product A', category: 'electronics', date: '2024-01-15' },
-  { id: 2, name: 'Product B', category: 'Electronics', date: '2024-02-20' },
-  { id: 1, name: 'Product A', category: 'electronics', date: '2024-01-15' }, // Duplicate
-  { id: 3, name: 'Product C', category: 'clothing', date: '2024-01-10' },
-  { id: 4, name: 'Product D', category: ' CLOTHING ', date: '2024-03-05' },
-  { id: 5, name: 'Product E', category: 'electronics', date: '2024-02-28' },
+  { id: 1, name: "Product A", category: "electronics", date: "2024-01-15" },
+  { id: 2, name: "Product B", category: "Electronics", date: "2024-02-20" },
+  { id: 1, name: "Product A", category: "electronics", date: "2024-01-15" }, // Duplicate
+  { id: 3, name: "Product C", category: "clothing", date: "2024-01-10" },
+  { id: 4, name: "Product D", category: " CLOTHING ", date: "2024-03-05" },
+  { id: 5, name: "Product E", category: "electronics", date: "2024-02-28" },
 ];
+
+type Item = (typeof MESSY_DATA)[number];
+
+const cleanAndTransform = (data: Item[]) => {
+  const cleanedData = [
+    ...data
+      .reduce<Map<number, Item>>((acc, item) => {
+        const formattedCategory = item.category.trim().toLowerCase();
+
+        if (!acc.has(item.id)) {
+          acc.set(item.id, {
+            ...item,
+            category:
+              formattedCategory[0].toUpperCase() + formattedCategory.slice(1),
+          });
+        }
+
+        return acc;
+      }, new Map())
+      .values(),
+  ];
+
+  const sections = cleanedData.reduce<Record<string, Item[]>>(
+    (categories, item) => {
+      if (!categories[item.category]) {
+        categories[item.category] = [];
+      }
+
+      categories[item.category].push(item);
+
+      return categories;
+    },
+    {},
+  );
+
+  const formattedSections = Object.entries(sections).map(([key, val]) => ({
+    title: key,
+    data: val.sort(
+      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+    ),
+  }));
+
+  return formattedSections.sort((a, b) => a.title.localeCompare(b.title));
+};
 
 function DataTransformerPractice() {
   const [loading, setLoading] = useState(true);
-  const [sections, setSections] = useState([]);
+  const [sections, setSections] = useState<
+    ReadonlyArray<{ title: string; data: Item[] }>
+  >([]);
 
   useEffect(() => {
     processData();
@@ -77,52 +123,53 @@ function DataTransformerPractice() {
       setLoading(true);
 
       // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      const cleaned = cleanAndTransform(MESSY_DATA);
-      setSections(cleaned);
+      const sectionsData = cleanAndTransform(MESSY_DATA);
+
+      setSections(sectionsData);
     } catch (error) {
-      console.error('Processing error:', error);
+      console.error("Processing error:", error);
     } finally {
       setLoading(false);
     }
   };
 
-  const cleanAndTransform = (rawData) => {
-    console.log('Original data:', rawData.length);
+  // const cleanAndTransform = (rawData) => {
+  //   console.log("Original data:", rawData.length);
 
-    // TODO: STEP 1 - Remove duplicates by ID using Set
-    // HINT: Create a Set to track seen IDs
-    // Use filter to keep only items we haven't seen before
-    const uniqueItems = []; // Replace this with your implementation
+  //   // TODO: STEP 1 - Remove duplicates by ID using Set
+  //   // HINT: Create a Set to track seen IDs
+  //   // Use filter to keep only items we haven't seen before
+  //   const uniqueItems = []; // Replace this with your implementation
 
-    console.log('After deduplication:', uniqueItems.length);
+  //   console.log("After deduplication:", uniqueItems.length);
 
-    // TODO: STEP 2 - Normalize categories (lowercase, trim whitespace)
-    // HINT: Use map to create new objects with normalized category
-    // Use .toLowerCase() and .trim() on the category string
-    const normalized = []; // Replace this with your implementation
+  //   // TODO: STEP 2 - Normalize categories (lowercase, trim whitespace)
+  //   // HINT: Use map to create new objects with normalized category
+  //   // Use .toLowerCase() and .trim() on the category string
+  //   const normalized = []; // Replace this with your implementation
 
-    // TODO: STEP 3 - Group by category
-    // HINT: Use reduce to create an object like:
-    // { electronics: [item1, item2], clothing: [item3] }
-    const grouped = {}; // Replace this with your implementation
+  //   // TODO: STEP 3 - Group by category
+  //   // HINT: Use reduce to create an object like:
+  //   // { electronics: [item1, item2], clothing: [item3] }
+  //   const grouped = {}; // Replace this with your implementation
 
-    // TODO: STEP 4 - Sort each category by date (newest first)
-    // HINT: Loop through Object.keys(grouped)
-    // For each category, use .sort() with a comparator
-    // Compare dates: new Date(b.date) - new Date(a.date) for descending
-    // Your code here
+  //   // TODO: STEP 4 - Sort each category by date (newest first)
+  //   // HINT: Loop through Object.keys(grouped)
+  //   // For each category, use .sort() with a comparator
+  //   // Compare dates: new Date(b.date) - new Date(a.date) for descending
+  //   // Your code here
 
-    // TODO: STEP 5 - Convert to SectionList format
-    // HINT: Use Object.keys(grouped).sort() to get sorted category names
-    // Map each category to an object: { title: 'Category', data: [...items] }
-    // Capitalize the first letter of category for title
-    const sections = []; // Replace this with your implementation
+  //   // TODO: STEP 5 - Convert to SectionList format
+  //   // HINT: Use Object.keys(grouped).sort() to get sorted category names
+  //   // Map each category to an object: { title: 'Category', data: [...items] }
+  //   // Capitalize the first letter of category for title
+  //   const sections = []; // Replace this with your implementation
 
-    console.log('Final sections:', sections.length);
-    return sections;
-  };
+  //   console.log("Final sections:", sections.length);
+  //   return sections;
+  // };
 
   if (loading) {
     return (
@@ -155,29 +202,29 @@ function DataTransformerPractice() {
 }
 
 const styles = StyleSheet.create({
-  centered: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  loadingText: { marginTop: 10, color: '#666' },
+  centered: { flex: 1, justifyContent: "center", alignItems: "center" },
+  loadingText: { marginTop: 10, color: "#666" },
   listContent: { padding: 16 },
   sectionHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#0066cc',
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#0066cc",
     padding: 12,
     marginTop: 8,
     borderRadius: 8,
   },
-  sectionTitle: { fontSize: 18, fontWeight: 'bold', color: 'white', flex: 1 },
-  sectionCount: { fontSize: 14, color: 'white' },
+  sectionTitle: { fontSize: 18, fontWeight: "bold", color: "white", flex: 1 },
+  sectionCount: { fontSize: 14, color: "white" },
   item: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     padding: 16,
     marginTop: 8,
     borderRadius: 8,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
-  itemName: { fontSize: 16, fontWeight: '600' },
-  itemDate: { fontSize: 14, color: '#666' },
+  itemName: { fontSize: 16, fontWeight: "600" },
+  itemDate: { fontSize: 14, color: "#666" },
 });
 
 export default DataTransformerPractice;
