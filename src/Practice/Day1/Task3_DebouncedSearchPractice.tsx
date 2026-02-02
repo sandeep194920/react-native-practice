@@ -51,6 +51,7 @@ import {
   Text,
   ActivityIndicator,
   StyleSheet,
+  RefreshControl,
 } from "react-native";
 
 interface User {
@@ -114,12 +115,12 @@ function DebouncedSearchPractice() {
         autoCorrect={false}
       />
 
-      {loading && (
+      {/* {loading && (
         <View style={styles.loadingContainer}>
           <ActivityIndicator />
           <Text style={styles.loadingText}>Searching...</Text>
         </View>
-      )}
+      )} */}
 
       <FlatList
         data={results}
@@ -130,6 +131,13 @@ function DebouncedSearchPractice() {
             <Text style={styles.resultEmail}>{item.email}</Text>
           </View>
         )}
+        refreshControl={
+          <RefreshControl
+            onRefresh={fetchData}
+            refreshing={loading}
+            enabled={searchTerm !== ''}
+          />
+        }
         ListEmptyComponent={
           !loading && searchQuery.trim() !== "" ? (
             <View style={styles.empty}>
