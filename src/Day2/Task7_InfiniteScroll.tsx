@@ -36,14 +36,14 @@
  * 4. Duplicate items (fix: ensure unique IDs)
  */
 
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   FlatList,
   View,
   Text,
   ActivityIndicator,
   StyleSheet,
-} from 'react-native';
+} from "react-native";
 
 const ITEMS_PER_PAGE = 20;
 
@@ -61,18 +61,18 @@ function InfiniteScrollList() {
 
     try {
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      await new Promise((resolve) => setTimeout(resolve, 1500));
 
       const newItems = generateMoreData(page + 1);
 
       if (newItems.length === 0) {
         setHasMore(false);
       } else {
-        setData(prevData => [...prevData, ...newItems]);
-        setPage(prevPage => prevPage + 1);
+        setData((prevData) => [...prevData, ...newItems]);
+        setPage((prevPage) => prevPage + 1);
       }
     } catch (error) {
-      console.error('Load more error:', error);
+      console.error("Load more error:", error);
     } finally {
       setLoading(false);
     }
@@ -112,7 +112,7 @@ function generateInitialData() {
   }));
 }
 
-function generateMoreData(page) {
+function generateMoreData(page: number) {
   // Simulate running out of data after 5 pages
   if (page > 5) return [];
 
@@ -126,7 +126,7 @@ function generateMoreData(page) {
 const styles = StyleSheet.create({
   item: {
     padding: 16,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     marginBottom: 8,
     marginHorizontal: 8,
     borderRadius: 8,
@@ -134,11 +134,11 @@ const styles = StyleSheet.create({
   itemText: { fontSize: 16 },
   footer: {
     padding: 20,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
   },
-  footerText: { marginLeft: 10, color: '#666' },
+  footerText: { marginLeft: 10, color: "#666" },
 });
 
 export default InfiniteScrollList;

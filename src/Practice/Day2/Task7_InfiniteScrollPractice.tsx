@@ -33,14 +33,14 @@
  * Implement the loadMore function and renderFooter!
  */
 
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   FlatList,
   View,
   Text,
   ActivityIndicator,
   StyleSheet,
-} from 'react-native';
+} from "react-native";
 
 const ITEMS_PER_PAGE = 20;
 
@@ -61,6 +61,24 @@ function InfiniteScrollListPractice() {
   // 7. Set loading to false in finally
   const loadMore = async () => {
     // Your code here
+    if (loading || !hasMore) return;
+
+    setLoading(true);
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
+      const newItems = generateMoreData(page + 1);
+      if (newItems.length === 0) {
+        setHasMore(false);
+      } else {
+        setData((prev) => [...prev, ...newItems]);
+        setPage((prev) => prev + 1);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   // TODO: Implement renderFooter
@@ -68,7 +86,14 @@ function InfiniteScrollListPractice() {
   // Otherwise, return a View with ActivityIndicator and loading text
   const renderFooter = () => {
     // Your code here
-    return null;
+    if (!loading) return null;
+
+    return (
+      <View style={styles.footer}>
+        <ActivityIndicator size="small" color="#0066cc" />
+        <Text style={styles.footerText}>Loading more...</Text>
+      </View>
+    );
   };
 
   return (
@@ -81,34 +106,38 @@ function InfiniteScrollListPractice() {
         </View>
       )}
       // TODO: Add onEndReached prop - call loadMore
+      onEndReached={loadMore}
       // TODO: Add onEndReachedThreshold prop - use 0.5
+      onEndReachedThreshold={0.5}
       // TODO: Add ListFooterComponent prop - call renderFooter
+      ListFooterComponent={renderFooter}
     />
   );
 }
 
-function generateInitialData() {
+const generateInitialData = () => {
   return Array.from({ length: ITEMS_PER_PAGE }, (_, i) => ({
     id: i + 1,
     title: `Item ${i + 1}`,
   }));
-}
+};
 
-function generateMoreData(page) {
-  // Simulate running out of data after 5 pages
+const generateMoreData = (page: number) => {
   if (page > 5) return [];
 
-  const start = (page - 1) * ITEMS_PER_PAGE;
-  return Array.from({ length: ITEMS_PER_PAGE }, (_, i) => ({
-    id: start + i + 1,
-    title: `Item ${start + i + 1}`,
-  }));
-}
+  return Array.from({ length: ITEMS_PER_PAGE }, (_, i) => {
+    const start = (page - 1) * ITEMS_PER_PAGE;
+    return {
+      id: start + i + 1,
+      title: `Item ${start + i + 1}`,
+    };
+  });
+};
 
 const styles = StyleSheet.create({
   item: {
     padding: 16,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     marginBottom: 8,
     marginHorizontal: 8,
     borderRadius: 8,
@@ -116,11 +145,11 @@ const styles = StyleSheet.create({
   itemText: { fontSize: 16 },
   footer: {
     padding: 20,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
   },
-  footerText: { marginLeft: 10, color: '#666' },
+  footerText: { marginLeft: 10, color: "#666" },
 });
 
 export default InfiniteScrollListPractice;
